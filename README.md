@@ -29,6 +29,11 @@ Role Variables
 | vector_group | "vector" | Группа пользователей для запуска Vector |
 
 
+Templates and files
+-------------------
+
+Для настройки поведения Vector небходимо внести изменения в шаблон [templates/vector.yaml.j2](templates/vector.yaml.j2).
+
 Example Playbook
 ----------------
 
