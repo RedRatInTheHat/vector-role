@@ -28,10 +28,6 @@ Role Variables
 | vector_user | "vector" | Пользователь для запуска Vector |
 | vector_group | "vector" | Группа пользователей для запуска Vector |
 
-Dependencies
-------------
-
-Нет.
 
 Example Playbook
 ----------------
@@ -41,8 +37,3 @@ Example Playbook
   roles:
     - vector-role
 ```
-
-License
--------
-
-MIT
