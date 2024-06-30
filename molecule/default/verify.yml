@@ -1,0 +1,54 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  vars:
+    vector_user: vector
+    vector_group: vector
+
+  tasks:
+    - name: Get vector user info
+      ansible.builtin.user:
+        name: "{{ vector_user }}"
+        state: present
+      check_mode: true
+      register: user
+
+    - name: Get vector group info
+      ansible.builtin.getent:
+        database: group
+        key: "{{ vector_group }}"
+        split: ':'
+
+    - name: Get Vector service info
+      ansible.builtin.service:
+        name: vector
+        state: started
+      check_mode: true
+      register: vector_service
+
+    - name: Get Vector configuration validation result
+      ansible.builtin.command: vector validate /etc/vector/vector.yaml
+      register: vector_configuration_validation_code
+      failed_when: false
+    
+
+    - name: Check if user exists
+      ansible.builtin.assert:
+        that:
+          - user.state == 'present'
+
+    - name: Check if vector user is in vector group
+      ansible.builtin.assert:
+        that:
+          - user.group | string == ansible_facts.getent_group[vector_group][1]
+
+    - name: Check if Vector service started
+      ansible.builtin.assert:
+        that:
+          - vector_service.state == "started"
+
+    - name: Check if Vector configuration is valid
+      ansible.builtin.assert:
+        that:
+          - vector_configuration_validation_code.rc == 0
