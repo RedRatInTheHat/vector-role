@@ -3,12 +3,16 @@ pipeline {
     stages {
         stage("Prepare files") {
             steps {
-                git branch: 'main', url: 'https://github.com/RedRatInTheHat/vector-role.git'
+                dir ('vector-role') {
+                    git branch: 'main', url: 'https://github.com/RedRatInTheHat/vector-role.git'
+                }
             }
         }
         stage("Build") {
             steps {
-                sh 'python3 -m molecule test'
+                dir ('vector-role') {
+                    sh 'python3 -m molecule test'
+                }
             }
         }
     }
